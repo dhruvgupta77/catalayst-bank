@@ -1,0 +1,10 @@
+# Fully offline demo: embedded H2 (PostgreSQL mode), in-process event bus, deterministic recommendations.
+# Override any value with environment variables (docker compose does this to use PostgreSQL + Kafka).
+spring:
+  datasource:
+    url: jdbc:h2:mem:catalyst-${random.uuid};MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+catalyst:
+  bus: memory
+  ai-mode: scripted

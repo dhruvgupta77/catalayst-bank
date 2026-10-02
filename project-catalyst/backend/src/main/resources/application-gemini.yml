@@ -1,0 +1,14 @@
+# Google Gemini as the LLM provider. Requires GEMINI_API_KEY.
+spring:
+  ai:
+    model:
+      chat: google-genai
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: ${GEMINI_MODEL:gemini-3.8-flash}
+            temperature: 0.2
+catalyst:
+  ai-mode: llm

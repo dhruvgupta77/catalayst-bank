@@ -1,0 +1,13 @@
+# OpenAI as the LLM provider. Requires OPENAI_API_KEY.
+spring:
+  ai:
+    model:
+      chat: openai
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: ${OPENAI_MODEL:gpt-4o-mini}
+          temperature: 0.2
+catalyst:
+  ai-mode: llm

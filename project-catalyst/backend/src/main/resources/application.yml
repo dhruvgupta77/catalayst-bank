@@ -1,0 +1,71 @@
+# Production-style defaults: PostgreSQL + Kafka. Secrets come from environment variables only.
+spring:
+  application:
+    name: catalyst-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/catalyst}
+    username: ${DB_USER:catalyst}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+  ai:
+    # No model is active unless the `azure`, `gemini`, `openai` or `ollama` profile is enabled.
+    model:
+      chat: none
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        transcription: none
+        speech: none
+
+catalyst:
+  bus: ${CATALYST_BUS:kafka}          # kafka | memory
+  ai-mode: ${CATALYST_AI_MODE:scripted} # scripted (offline) | llm
+  latency-target-ms: ${CATALYST_LATENCY_TARGET_MS:2000}
+  execution-step-delay-ms: ${CATALYST_STEP_DELAY_MS:600}
+  consent-ttl-minutes: 15
+  decision:
+    high-interest-threshold: 15
+    min-account-buffer: 2000
+    transaction-limit: 100000
+    salary-discretionary-share: 0.15
+    insurance-allocatable-share: 0.50
+
+server:
+  port: 8080
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    kafka:
+      enabled: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level correlationId=%X{correlationId:-} eventId=%X{eventId:-} %logger{24} - %msg%n"
+  level:
+    org.apache.kafka: WARN
